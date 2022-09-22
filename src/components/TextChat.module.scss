@@ -1,0 +1,25 @@
+.root {
+  display: grid;
+  grid-template-rows: auto min-content;
+  row-gap: 10px;
+  height: 100%;
+}
+
+.field {
+  padding: 5px; 
+  border-radius:5px;
+  overflow-y: scroll; 
+  border: 1px solid #CCC;
+  width: 100%;
+  align-content: stretch;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.chatInputWrapper {
+  margin-right: 10px;
+}
