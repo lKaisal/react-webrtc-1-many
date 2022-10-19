@@ -1,7 +1,7 @@
 // https://dominikdosoudil.medium.com/building-event-emitter-using-react-hooks-650f94a057ea
 
 import { useCallback, useMemo, useReducer } from "react";
-import EventContext from "./hooks/EventContext";
+import EventContext from "./EventContext";
 
 // type State = {[key: string]: any}
 

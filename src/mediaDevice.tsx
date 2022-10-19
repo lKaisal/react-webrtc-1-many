@@ -1,10 +1,14 @@
-import { useCallback } from "react";
-import useEventDispatch from './hooks/useEventDispatch';
+import Emitter from './Emitter';
 
-const MediaDevice = () => {
-  const dispatchEvent = useEventDispatch();
+class MediaDevice extends Emitter {
+  stream: MediaStream | null;
+  
+  constructor() {
+    super();
+    this.stream = null;
+  }
 
-  function start() {
+  start() {
     const constraints = {
       video: {
         facingMode: 'user',
@@ -16,9 +20,8 @@ const MediaDevice = () => {
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then((stream) => {
-        useCallback(() => {
-          dispatchEvent('stream', stream);
-        }, [dispatchEvent]);
+        this.stream = stream;
+        this.emit({ evt: 'stream', payload: stream });
       })
       .catch((err) => {
         if (err instanceof DOMException) {
@@ -27,6 +30,16 @@ const MediaDevice = () => {
           console.log(err);
         }
       });
+  }
+
+  toggle({ type, on }: { type: 'Audio' | 'Video', on?: boolean }) {
+    if (this.stream) {
+      this.stream[`get${type}Tracks`]().forEach((track) => {
+        track.enabled = on !== undefined ? on : !track.enabled;
+      });
+    }
+
+    return this;
   }
 }
 

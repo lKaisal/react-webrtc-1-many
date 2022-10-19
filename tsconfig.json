@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "wo classes/EventEmitter.js", "wo classes/peerConnection.tsx", "wo classes/mediaDevice.tsx", "wo classes/useEventDispatch.tsx", "wo classes/useEvent.tsx", "wo classes/EventContext.tsx"  ]
 }
