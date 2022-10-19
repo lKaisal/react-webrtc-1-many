@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import PeerConnection from './peerConnection';
+import PeerConnection from '../wo classes/peerConnection';
 import VideoChat from './components/VideoChat';
 import TextChat from './components/TextChat';
 import myWs from './ws';
