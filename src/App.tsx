@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import PeerConnection from '../wo classes/peerConnection';
 import VideoChat from './components/VideoChat';
 import TextChat from './components/TextChat';
 import myWs from './ws';
+import PeerConnection from './PeerConnection';
 import styles from './App.module.scss';
 
 function App() {
   const [clientId, setClientId] = useState<string>('');
   const [config, setConfig] = useState<{ audio: boolean, video: boolean }>({ audio: false, video: false});
   const [pc, setPC] = useState<RTCPeerConnection | null>(null);
+  const [callWindowStatus, setCallWindowStatus] = useState<'active' | 'inactive'>('inactive');
+  const [callModalStatus, setCallModalStatus] = useState<'active' | 'inactive'>('inactive');
+  const [localSrc, setLocalSrc] = useState<MediaStream | null>(null);
+  const [peerSrc, setPeerSrc] = useState<MediaStream | null>(null);
 
   useEffect(() => {
     const id = uuid();
@@ -17,22 +21,34 @@ function App() {
   }, [])
 
   function startCall({isCaller, friendId, config}: { 
-    isCaller: Boolean, 
-    friendId: Number, 
+    isCaller: boolean, 
+    friendId: string, 
     config: {
       audio: boolean, 
       video: boolean
     } 
   }) {
     setConfig(config);
-    setPC(new PeerConnection({friendId}));
+    // const pc: RTCPeerConnection = new PeerConnection({ friendId }).pc;
+    const peerConnection = new PeerConnection({ friendId });
+    peerConnection
       .on('localStream', (src) => {
-        const newState = { callWindow: 'active', localSrc: src };
-        if (!isCaller) newState.callModal = '';
-        this.setState(newState);
+        setCallWindowStatus('active');
+        setLocalSrc(src);
+
+        if (!isCaller) {
+          setCallModalStatus('inactive');
+        } else {
+          setCallModalStatus('active');
+        }
       })
-      .on('peerStream', (src) => this.setState({ peerSrc: src }))
-      .start(isCaller);
+      .on('peerStream', (src) => {
+        setPeerSrc(src);
+      })
+      .start({ isCaller });
+
+    const pc = peerConnection.pc;
+    setPC(pc);
   }
 
   return (
@@ -41,7 +57,7 @@ function App() {
         <div className={styles.content}>
           {/* <span id="status">Connecting...</span> */}
           <div className={styles.videoChat}>
-            <VideoChat startCall={startCall}/>
+            <VideoChat startCall={startCall} localSrc={localSrc} remoteSrc={peerSrc}/>
           </div>
 
           <div className={styles.textChat}>

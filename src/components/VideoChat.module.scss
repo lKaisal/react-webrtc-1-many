@@ -5,3 +5,32 @@
   border: 1px solid #CCC;
 }
 
+.videoControls {
+  display: flex;
+}
+
+.chatInputWrapper {
+  margin-right: 10px;
+}
+
+.videos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.videoWrapper {
+  width: calc(50% - 50px);
+
+  &:nth-child(2n + 1) {
+    margin-right: 25px;
+  }
+  &:nth-child(2n) {
+    margin-left: 25px;
+  }
+}
+
+video {
+  width: 100%;
+  border-radius: 20px;
+}
+

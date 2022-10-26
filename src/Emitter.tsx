@@ -2,8 +2,10 @@ type Event = string;
 type Fn = (payload: Events['payload']) => void;
 
 type StreamEvent = { evt: 'stream', payload: MediaStream };
+type PeerStreamEvent = { evt: 'peerStream', payload: MediaStream };
+type LocalStream = { evt: 'localStream', payload: MediaStream };
 
-type Events = StreamEvent;
+type Events = StreamEvent | PeerStreamEvent | LocalStream;
 
 class Emitter {
   events: {[key: Event]: Fn[]}
@@ -32,12 +34,12 @@ class Emitter {
     return this;
   }
 
-  off(evt: Event, fn: Fn) {
+  off(evt?: Event, fn?: Fn) {
     if (evt && typeof fn === 'function') {
       const listeners = this.events[evt];
       const index = listeners.findIndex((_fn) => _fn === fn);
       listeners.splice(index, 1);
-    } else {
+    } else if (evt) {
       this.events[evt] = [];
     }
 

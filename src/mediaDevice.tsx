@@ -32,6 +32,14 @@ class MediaDevice extends Emitter {
       });
   }
 
+  stop() {
+    if (this.stream) {
+      this.stream.getTracks().forEach((track) => track.stop());
+    }
+
+    return this;
+  }
+
   toggle({ type, on }: { type: 'Audio' | 'Video', on?: boolean }) {
     if (this.stream) {
       this.stream[`get${type}Tracks`]().forEach((track) => {

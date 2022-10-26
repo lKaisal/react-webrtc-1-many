@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, RefObject } from 'react';
 import { Button, TextField } from '@mui/material';
 import styles from './VideoChat.module.scss';
 
@@ -15,10 +15,25 @@ interface VideoChatProps {
       video: boolean
     }
   }) => void,
+  localSrc: MediaStream | null,
+  remoteSrc: MediaStream | null,
 }
 
-const VideoChat = ({startCall}: VideoChatProps): JSX.Element => {
+const VideoChat = ({startCall, localSrc, remoteSrc}: VideoChatProps): JSX.Element => {
   const [friendId, setFriendId] = useState<string>('');
+  const localVideo = useRef<HTMLVideoElement>(null);
+  const remoteVideo = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (localVideo.current && localSrc) {
+      localVideo.current.srcObject = localSrc;
+    }
+
+    if (remoteVideo.current && remoteSrc) {
+      console.log(remoteSrc);
+      remoteVideo.current.srcObject = remoteSrc;
+    }
+  }, [localSrc, remoteSrc]);
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newValue = e.target.value;
@@ -56,6 +71,14 @@ const VideoChat = ({startCall}: VideoChatProps): JSX.Element => {
           />
         </div>
         <Button variant='contained' onClick={initCall}>Call</Button>
+      </div>
+      <div className={styles.videos}>
+        <div className={styles.videoWrapper}>
+          <video id="localVideo" ref={localVideo} autoPlay></video>
+        </div>
+        <div className={styles.videoWrapper}>
+          <video id="remoteVideo" ref={remoteVideo} autoPlay></video>
+        </div>
       </div>
     </div>
   )
