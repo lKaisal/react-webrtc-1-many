@@ -1,25 +1,28 @@
 import { useState, useRef, useEffect, RefObject } from 'react';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import styles from './VideoChat.module.scss';
 
 interface VideoChatProps {
   startCall: ({
     isCaller, 
+    id,
     friendId, 
     config
   }: {
-    isCaller: boolean, 
+    isCaller: boolean,
+    id: string, 
     friendId: string, 
     config: {
       audio: boolean, 
       video: boolean
     }
   }) => void,
+  id: string,
   localSrc: MediaStream | null,
   remoteSrc: MediaStream | null,
 }
 
-const VideoChat = ({startCall, localSrc, remoteSrc}: VideoChatProps): JSX.Element => {
+const VideoChat = ({startCall, id, localSrc, remoteSrc}: VideoChatProps): JSX.Element => {
   const [friendId, setFriendId] = useState<string>('');
   const localVideo = useRef<HTMLVideoElement>(null);
   const remoteVideo = useRef<HTMLVideoElement>(null);
@@ -30,7 +33,6 @@ const VideoChat = ({startCall, localSrc, remoteSrc}: VideoChatProps): JSX.Elemen
     }
 
     if (remoteVideo.current && remoteSrc) {
-      console.log(remoteSrc);
       remoteVideo.current.srcObject = remoteSrc;
     }
   }, [localSrc, remoteSrc]);
@@ -52,13 +54,14 @@ const VideoChat = ({startCall, localSrc, remoteSrc}: VideoChatProps): JSX.Elemen
       return;
     }
 
-    const config = { audio: true, video: true };
+    const config = { audio: false, video: true };
     
-    startCall({isCaller: true, friendId, config});
+    startCall({isCaller: true, id, friendId, config});
   }
 
   return (
     <div className={styles.root}>
+      <Typography>Your id: {id}</Typography>
       <div className={styles.videoControls}>
         <div className={styles.chatInputWrapper}>
           <TextField
