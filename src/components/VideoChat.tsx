@@ -17,22 +17,23 @@ interface VideoChatProps {
       video: boolean
     }
   }) => void,
+  endCall: ({isCaller}: {isCaller: boolean}) => void,
   id: string,
   localSrc: MediaStream | null,
   remoteSrc: MediaStream | null,
 }
 
-const VideoChat = ({startCall, id, localSrc, remoteSrc}: VideoChatProps): JSX.Element => {
+const VideoChat = ({startCall, endCall, id, localSrc, remoteSrc}: VideoChatProps): JSX.Element => {
   const [friendId, setFriendId] = useState<string>('');
   const localVideo = useRef<HTMLVideoElement>(null);
   const remoteVideo = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (localVideo.current && localSrc) {
+    if (localVideo.current) {
       localVideo.current.srcObject = localSrc;
     }
 
-    if (remoteVideo.current && remoteSrc) {
+    if (remoteVideo.current) {
       remoteVideo.current.srcObject = remoteSrc;
     }
   }, [localSrc, remoteSrc]);
@@ -59,6 +60,11 @@ const VideoChat = ({startCall, id, localSrc, remoteSrc}: VideoChatProps): JSX.El
     startCall({isCaller: true, id, friendId, config});
   }
 
+  function initEndCall() {
+    endCall({isCaller: true});
+    setFriendId('');
+  }
+
   return (
     <div className={styles.root}>
       <Typography>Your id: {id}</Typography>
@@ -74,6 +80,7 @@ const VideoChat = ({startCall, id, localSrc, remoteSrc}: VideoChatProps): JSX.El
           />
         </div>
         <Button variant='contained' onClick={initCall}>Call</Button>
+        <Button variant='contained' onClick={initEndCall}>End call</Button>
       </div>
       <div className={styles.videos}>
         <div className={styles.videoWrapper}>

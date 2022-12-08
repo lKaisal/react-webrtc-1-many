@@ -68,7 +68,6 @@ class PeerConnection extends Emitter {
       .then((offer) => {
         this.pc.setLocalDescription(offer)
           .then(() => {
-            // ?????
             ws.send(JSON.stringify({action: 'WEBRTC_MESSAGE', data: {
               evt: 'CALL_OFFER',
               to: this.friendId,
@@ -88,7 +87,6 @@ class PeerConnection extends Emitter {
       .then((offer) => {
         this.pc.setLocalDescription(offer)
           .then(() => {
-            // ?????
             ws.send(JSON.stringify({action: 'WEBRTC_MESSAGE', data: {
               evt: 'CALL_OFFER',
               to: this.friendId,

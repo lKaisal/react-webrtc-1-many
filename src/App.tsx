@@ -155,7 +155,7 @@ function App() {
         <div className={styles.content}>
           {/* <span id="status">Connecting...</span> */}
           <div className={styles.videoChat}>
-            <VideoChat id={clientId} startCall={startCall} localSrc={localSrc} remoteSrc={peerSrc}/>
+            <VideoChat id={clientId} startCall={startCall} endCall={endCall} localSrc={localSrc} remoteSrc={peerSrc}/>
           </div>
 
           <div className={styles.textChat}>
