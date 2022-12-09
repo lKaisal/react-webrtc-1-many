@@ -101,7 +101,7 @@ function App() {
     };
 
     // myWs.send(JSON.stringify({action: 'END'}));
-  }, [clientId, pc]);
+  }, [clientId, pc, chatMessages]);
 
   function sendChatMessage({msg} : {msg: string}) {
     myWs.send(JSON.stringify({ action: 'MESSAGE', data: msg}));
