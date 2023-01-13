@@ -9,13 +9,15 @@
   display: flex;
 }
 
-.chatInputWrapper {
+.chatInputWrapper, 
+button:not(:last-child) {
   margin-right: 10px;
 }
 
 .videos {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .videoWrapper {
